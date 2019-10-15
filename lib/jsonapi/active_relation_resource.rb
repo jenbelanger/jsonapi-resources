@@ -408,6 +408,10 @@ module JSONAPI
             Arel.sql("#{concat_table_field(resource_table_alias, resource_klass._primary_key)} AS #{resource_table_alias}_#{resource_klass._primary_key}")
         ]
 
+        resource_klass.default_sort.each do |sort|
+          pluck_fields << Arel.sql("#{concat_table_field(resource_table_alias, sort[:field])} AS #{resource_table_alias}_#{sort[:field]}")
+        end
+
         cache_field = resource_klass.attribute_to_model_field(:_cache_field) if options[:cache]
         if cache_field
           pluck_fields << Arel.sql("#{concat_table_field(resource_table_alias, cache_field[:name])} AS #{resource_table_alias}_#{cache_field[:name]}")
